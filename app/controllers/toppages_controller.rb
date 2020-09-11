@@ -1,4 +1,5 @@
 class ToppagesController < ApplicationController
+  
   def index
     if logged_in?
       @micropost = current_user.microposts.build

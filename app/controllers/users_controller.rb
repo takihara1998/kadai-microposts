@@ -8,7 +8,8 @@ class UsersController < ApplicationController
   def show
     @user = User.find(params[:id])
     @microposts = @user.microposts.order(id: :desc).page(params[:page])
-    counts(@user)
+    counts(@user)  #ApplicationControllerのメソッドを呼び出している
+                   #ここで呼んでるからViewで@count_micropostsとかが使える。
   end
 
   def new
@@ -20,6 +21,7 @@ class UsersController < ApplicationController
 
     if @user.save
       flash[:success] = 'ユーザを登録しました。'
+      session[:user_id] = @user.id
       redirect_to @user
     else
       flash.now[:danger] = 'ユーザの登録に失敗しました。'
@@ -39,10 +41,16 @@ class UsersController < ApplicationController
     counts(@user)
   end
   
+  def likes
+    @user = User.find(params[:id])
+    @likes = @user.likes.order(id: :desc).page(params[:page])
+    counts(@user)
+  end
+  
   private
 
     def user_params
       params.require(:user).permit(:name, :email, :password, :password_confirmation)
     end
-    
+
 end

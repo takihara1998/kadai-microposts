@@ -1,0 +1,22 @@
+<!-- like一覧表示のパーシャル  -->
+<% if likes.any? %>
+  <ul class="list-unstyled">
+    <% likes.each do |like| %>
+      <li class="media mb-4">
+        <img class="mr-2 rounded" src="<%= gravatar_url(@user, { size: 50 }) %>" alt="">
+        <div class="media-body">
+          <div>
+            <%= link_to "#{like.user.name}", user_path(like.user) %>  <span class="text-muted">posted at <%= like.created_at %></span>
+          </div>
+          <div>
+            <%= like.content %>
+          </div>
+          <% if current_user == @user %>
+            <%= render 'favorites/like_button', micropost: like %>
+          <% end %>
+        </div>
+      </li>
+    <% end %>
+  </ul>
+  <%= paginate likes %>
+<% end %>
